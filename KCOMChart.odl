@@ -1,0 +1,128 @@
+// KCOMChart.odl : type library source for ActiveX Control project.
+
+// This file will be processed by the Make Type Library (mktyplib) tool to
+// produce the type library (KCOMChart.tlb) that will become a resource in
+// KCOMChart.ocx.
+
+#include <olectl.h>
+#include <idispids.h>
+
+[ uuid(503612A2-50B5-11D3-A7FE-0080C8763FA4), version(1.0),
+  helpfile("KCOMChart.hlp"),
+  helpstring("KCOMChart ActiveX Control module"),
+  control ]
+library KCOMCHARTLib
+{
+	importlib(STDOLE_TLB);
+	importlib(STDTYPE_TLB);
+	importlib("msdatsrc.tlb");
+
+    typedef enum _Alignment{
+        Left = 0,
+        Right = 1,
+        Center = 2
+    } Constants_Alignment;
+
+    typedef enum _SeriesUsage{
+        Show = 0,
+        Hide = 1,
+        Exclude = 2
+    } Constants_SeriesUsage;
+
+    typedef enum _DataMode{
+        DataModeBound = 0,
+        DataModeAddItem = 1
+    } Constants_DataMode;
+
+	//  Primary dispatch interface for CKCOMChartCtrl
+
+	[ uuid(503612A3-50B5-11D3-A7FE-0080C8763FA4),
+	  helpstring("Dispatch interface for KCOMChart Control"), hidden ]
+	dispinterface _DKCOMChart
+	{
+		properties:
+			// NOTE - ClassWizard will maintain property information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_PROP(CKCOMChartCtrl)
+			[id(1), helpstring("Determines the title of the chart")] BSTR Title;
+			[id(2), helpstring("Determines the foot note of the chart")] BSTR Footer;
+			[id(3), helpstring("Determines the alignment of the title")] Constants_Alignment TitleAlignment;
+			[id(4), helpstring("Determines the alignment of the foot note")] Constants_Alignment FooterAlignment;
+			[id(5), helpstring("Determines whether the legend show be drawn")] VARIANT_BOOL DrawLegend;
+			[id(DISPID_BACKCOLOR), bindable, requestedit, ,helpstring("Determines the backcolor of the chart")] OLE_COLOR BackColor;
+			[id(6), helpstring("Determines whether the title of each group should be drawn")] VARIANT_BOOL DrawGroupTitle;
+			[id(DISPID_APPEARANCE), bindable, requestedit, helpstring("Determines whether the control has the 3D-look appearance")] short Appearance;
+			[id(7), helpstring("Determines whether the control can be redrawn")] VARIANT_BOOL CanRedraw;
+			[id(DISPID_BORDERSTYLE), bindable, requestedit, helpstring("Determines whether the control has border line")] short BorderStyle;
+			[id(8), helpstring("Determines the font used to draw the title")] IFontDisp* TitleFont;
+			[id(9), helpstring("Determines the font used to draw the foot note")] IFontDisp* FooterFont;
+			[id(10), helpstring("Determines the font used to draw the legend and the titles of each chart group")] IFontDisp* LegendFont;
+			[id(11), helpstring("Determines the count of the series in each group")] long SeriesCount;
+			[id(12), helpstring("Determines the count of the groups")] long GroupCount;
+			[id(13)] BSTR DataMember;
+			[id(14), helpstring("Determines a value that Determines the OLE DB data provider through which the current control is bound to a database.")] DataSource* DataSource;
+			[id(15), helpstring("Determines the mode used for data access.")] Constants_DataMode DataMode;
+			[id(16), helpstring("Returns the index of group which is pointed by mouse cursor")] long GroupPointed;
+			//}}AFX_ODL_PROP
+
+		methods:
+			// NOTE - ClassWizard will maintain method information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_METHOD(CKCOMChartCtrl)
+			[id(DISPID_REFRESH), helpstring("Cause the control to be redrawn")] void Refresh();
+			[id(22), propget, helpstring("Determines the value of a cell")] double Value(long GroupIndex, long SeriesIndex);
+			[id(22), propput, helpstring("Determines the value of a cell")] void Value(long GroupIndex, long SeriesIndex, double newValue);
+			[id(17), helpstring("Add one group at given index, default at the end")] void AddGroup([optional] VARIANT GroupIndex);
+			[id(18), helpstring("Remove one group at given index, default at the end")] void RemoveGroup([optional] VARIANT GroupIndex);
+			[id(19), helpstring("Add one series at given index, default at the end")] void AddSeries([optional] VARIANT SeriesIndex);
+			[id(20), helpstring("Remove one series at given index, default at the end")] void RemoveSeries([optional] VARIANT SeriesIndex);
+			[id(23), propget, helpstring("Determines the color of a series")] OLE_COLOR SeriesColor(long SeriesIndex);
+			[id(23), propput, helpstring("Determines the color of a series")] void SeriesColor(long SeriesIndex, OLE_COLOR nNewValue);
+			[id(24), propget, helpstring("Determines the usage of a series")] Constants_SeriesUsage SeriesUsage(long SeriesIndex);
+			[id(24), propput, helpstring("Determines the usage of a series")] void SeriesUsage(long SeriesIndex, Constants_SeriesUsage nNewValue);
+			[id(25), propget] BSTR GroupTitle(long GroupIndex);
+			[id(25), propput] void GroupTitle(long GroupIndex, BSTR lpszNewValue);
+			[id(26), propget] BSTR SeriesTitle(long SeriesIndex);
+			[id(26), propput] void SeriesTitle(long SeriesIndex, BSTR lpszNewValue);
+			[id(21), helpstring("In bound mode, rebinds the grid to the database.  In unbound, refreshes the grid.")] void ReBind();
+			//}}AFX_ODL_METHOD
+
+			[id(DISPID_ABOUTBOX)] void AboutBox();
+	};
+
+	//  Event dispatch interface for CKCOMChartCtrl
+
+	[ uuid(503612A4-50B5-11D3-A7FE-0080C8763FA4),
+	  helpstring("Event interface for KCOMChart Control") ]
+	dispinterface _DKCOMChartEvents
+	{
+		properties:
+			//  Event interface has no properties
+
+		methods:
+			// NOTE - ClassWizard will maintain event information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_EVENT(CKCOMChartCtrl)
+			[id(DISPID_CLICK)] void Click();
+			[id(DISPID_DBLCLICK)] void DblClick();
+			[id(DISPID_KEYDOWN)] void KeyDown(short* KeyCode, short Shift);
+			[id(DISPID_KEYPRESS)] void KeyPress(short* KeyAscii);
+			[id(DISPID_KEYUP)] void KeyUp(short* KeyCode, short Shift);
+			[id(DISPID_MOUSEMOVE)] void MouseMove(short Button, short Shift, OLE_XPOS_PIXELS x, OLE_YPOS_PIXELS y);
+			//}}AFX_ODL_EVENT
+	};
+
+	//  Class information for CKCOMChartCtrl
+
+	[ uuid(503612A5-50B5-11D3-A7FE-0080C8763FA4),
+	  helpstring("KCOMChart Control"), control ]
+	coclass KCOMChart
+	{
+		[default] dispinterface _DKCOMChart;
+		[default, source] dispinterface _DKCOMChartEvents;
+	};
+
+
+	//{{AFX_APPEND_ODL}}
+	//}}AFX_APPEND_ODL}}
+};
